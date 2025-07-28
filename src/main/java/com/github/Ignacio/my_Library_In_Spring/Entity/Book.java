@@ -25,19 +25,21 @@ public class Book {
     @NotBlank(message = "gender not valid")
     private String gender;
 
+    private String title;
+
     private boolean available;
 
     @OneToMany(mappedBy = "book")
     private List<Loan> loans;
-
 
     @Positive
     private int yearOfPublication;
 
     public Book(){}
 
-    public Book(Long id, Author author, String editorial, String gender, boolean available, int yearOfPublication) {
+    public Book(Long id,String title, Author author, String editorial, String gender, boolean available, int yearOfPublication) {
         this.id = id;
+        this.title = title;
         this.author = author;
         this.editorial = editorial;
         this.gender = gender;
@@ -99,5 +101,13 @@ public class Book {
 
     public void setLoans(List<Loan> loans) {
         this.loans = loans;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

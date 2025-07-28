@@ -17,11 +17,11 @@ public class User {
     private String name;
 
     @NotBlank(message = "password not valid")
-    @Size(min = 5,message = "password not valid")
+    @Size(min = 5,message = "password size not valid")
     private String password;
 
     @NotBlank(message = "email not valid")
-    @Email(message = "email not valid")
+    @Email(message = "email structure not valid")
     private String email;
 
     @ElementCollection

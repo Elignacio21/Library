@@ -5,7 +5,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
-public class bookOutput {
+public class BookRequest {
     @Positive
     private Long id ;
 
@@ -24,9 +24,9 @@ public class bookOutput {
     @NotBlank
     private String editorial;
 
-    public bookOutput(){};
+    public BookRequest(){};
 
-    public bookOutput(Long id, String title, Author author, String gender, Integer yearOfPublication, String editorial) {
+    public BookRequest(Long id, String title, Author author, String gender, Integer yearOfPublication, String editorial) {
         this.id = id;
         this.title = title;
         this.author = author;
