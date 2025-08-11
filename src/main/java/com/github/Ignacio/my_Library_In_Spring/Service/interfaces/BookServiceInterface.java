@@ -1,10 +1,9 @@
-package com.github.Ignacio.my_Library_In_Spring.Service;
+package com.github.Ignacio.my_Library_In_Spring.Service.interfaces;
 
 import com.github.Ignacio.my_Library_In_Spring.DTOs.BookRequest;
 import com.github.Ignacio.my_Library_In_Spring.DTOs.BookResponse;
 
 import java.util.Map;
-import java.util.Objects;
 
 public interface BookServiceInterface {
     BookResponse getBookByName(String name);

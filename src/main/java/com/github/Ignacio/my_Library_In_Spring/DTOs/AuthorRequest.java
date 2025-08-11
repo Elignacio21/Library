@@ -1,15 +1,10 @@
-package com.github.Ignacio.my_Library_In_Spring.Entity;
+package com.github.Ignacio.my_Library_In_Spring.DTOs;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
-import java.util.List;
+public class AuthorRequest {
 
-@Entity
-public class Author {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotBlank(message = "id not valid")
     private Long id;
 
     @NotBlank(message = "name not valid")
@@ -21,28 +16,10 @@ public class Author {
     @NotBlank(message = "biography not valid")
     private String biography;
 
-    @OneToMany(mappedBy = "author")
-    private List<Book> books;
-
-    public Author(){};
-
-
-    public Author(Long id,String name, String nationality, String biography) {
-        this.id = id;
+    public AuthorRequest(String name, String nationality, String biography) {
         this.name = name;
         this.nationality = nationality;
         this.biography = biography;
-
-    }
-
-    public Author(String name, String nationality, String biography) {
-        this.name = name;
-        this.nationality = nationality;
-        this.biography = biography;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getName() {
@@ -67,13 +44,5 @@ public class Author {
 
     public void setBiography(String biography) {
         this.biography = biography;
-    }
-
-    public List<Book> getBooks() {
-        return books;
-    }
-
-    public void setBooks(List<Book> books) {
-        this.books = books;
     }
 }

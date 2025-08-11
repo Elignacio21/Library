@@ -5,8 +5,10 @@ import com.github.Ignacio.my_Library_In_Spring.DTOs.BookResponse;
 import com.github.Ignacio.my_Library_In_Spring.DTOs.Mapper;
 import com.github.Ignacio.my_Library_In_Spring.Entity.Author;
 import com.github.Ignacio.my_Library_In_Spring.Entity.Book;
+import com.github.Ignacio.my_Library_In_Spring.HandingError.NotBooksAvailableException;
 import com.github.Ignacio.my_Library_In_Spring.HandingError.NotFoundException;
 import com.github.Ignacio.my_Library_In_Spring.Repository.RepositoryBook;
+import com.github.Ignacio.my_Library_In_Spring.Service.interfaces.BookServiceInterface;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class BookService implements BookServiceInterface{
+public class BookService implements BookServiceInterface {
 
     private static Logger logeer = LoggerFactory.getLogger(BookService.class);
 
@@ -28,13 +30,17 @@ public class BookService implements BookServiceInterface{
     private Mapper mapper;
 
     public List<BookResponse> getAllBooks(){
-        return repoBook.findAll().stream().map(elem -> mapper.toBookResponse(elem)).toList();
+        List<BookResponse> list = repoBook.findAll().stream().map(elem -> mapper.toBookResponse(elem)).toList();
+        if(list.isEmpty()){
+            throw new NotBooksAvailableException("Book not available Exception");
+        }
+        return list;
     }
 
     @Override
     public BookResponse getBookByName( String name) {
 
-        Book target =repoBook.findByName(name)
+        Book target =repoBook.findByTitle(name)
                 .orElseThrow(() -> new NotFoundException("Book with name: "+name+" not found"));
 
         return mapper.toBookResponse(target);
@@ -87,7 +93,7 @@ public class BookService implements BookServiceInterface{
 
     @Override
     public BookResponse putBookByName(String name,BookRequest update) {
-        Book bookUpdate = repoBook.findByName(name)
+        Book bookUpdate = repoBook.findByTitle(name)
                 .orElseThrow(() -> new NotFoundException("Book with name: "+name+" not found"));
 
         bookUpdate.setTitle(update.getTitle());
@@ -148,7 +154,7 @@ public class BookService implements BookServiceInterface{
 
     @Override
     public BookResponse patchBookByName(String name, Map<String, Object> input) {
-        Book bookUpdate = repoBook.findByName(name).map(book -> {
+        Book bookUpdate = repoBook.findByTitle(name).map(book -> {
             input.forEach((key,value)->{
                 applyPatch(book,key,value);
             });

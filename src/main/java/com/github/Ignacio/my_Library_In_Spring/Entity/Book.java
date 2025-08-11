@@ -37,6 +37,7 @@ public class Book {
 
     public Book(){}
 
+    //for testing
     public Book(Long id,String title, Author author, String editorial, String gender, boolean available, int yearOfPublication) {
         this.id = id;
         this.title = title;
@@ -47,12 +48,17 @@ public class Book {
         this.yearOfPublication = yearOfPublication;
     }
 
-    public Long getId() {
-        return id;
+    public Book(String title, Author author, String editorial, String gender, boolean available, int yearOfPublication) {
+        this.title = title;
+        this.author = author;
+        this.editorial = editorial;
+        this.gender = gender;
+        this.available = available;
+        this.yearOfPublication = yearOfPublication;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Long getId() {
+        return id;
     }
 
     public Author getAuthor() {

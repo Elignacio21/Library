@@ -1,15 +1,14 @@
-package com.github.Ignacio.my_Library_In_Spring.Entity;
+package com.github.Ignacio.my_Library_In_Spring.DTOs;
 
-import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 
 import java.util.List;
 
-@Entity
-public class Author {
+public class AuthorResponse {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Positive(message = "id not valid")
     private Long id;
 
     @NotBlank(message = "name not valid")
@@ -21,28 +20,22 @@ public class Author {
     @NotBlank(message = "biography not valid")
     private String biography;
 
-    @OneToMany(mappedBy = "author")
-    private List<Book> books;
+    private List<@Valid BookSummary> books;
 
-    public Author(){};
-
-
-    public Author(Long id,String name, String nationality, String biography) {
+    public AuthorResponse(Long id, String name, String nationality, String biography, List<@Valid BookSummary> books) {
         this.id = id;
         this.name = name;
         this.nationality = nationality;
         this.biography = biography;
-
+        this.books = books;
     }
 
-    public Author(String name, String nationality, String biography) {
-        this.name = name;
-        this.nationality = nationality;
-        this.biography = biography;
-    }
-
-    public Long getId() {
+    private Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -69,11 +62,11 @@ public class Author {
         this.biography = biography;
     }
 
-    public List<Book> getBooks() {
+    public List<BookSummary> getBooks() {
         return books;
     }
 
-    public void setBooks(List<Book> books) {
+    public void setBooks(List<BookSummary> books) {
         this.books = books;
     }
 }

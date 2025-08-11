@@ -6,8 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
 public class BookRequest {
-    @Positive
-    private Long id ;
 
     @NotBlank
     private String title;
@@ -26,21 +24,12 @@ public class BookRequest {
 
     public BookRequest(){};
 
-    public BookRequest(Long id, String title, Author author, String gender, Integer yearOfPublication, String editorial) {
-        this.id = id;
+    public BookRequest(String title, Author author, String gender, Integer yearOfPublication, String editorial) {
         this.title = title;
         this.author = author;
         this.gender = gender;
         this.yearOfPublication = yearOfPublication;
         this.editorial = editorial;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getTitle() {
