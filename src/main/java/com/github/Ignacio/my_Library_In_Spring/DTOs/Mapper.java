@@ -33,8 +33,7 @@ public class Mapper {
     }
 
     public AuthorResponse toAuthorResponse(Author request){
-        List<BookSummary> books = new ArrayList<>();
-        return  new AuthorResponse(request.getId(), request.getName(), request.getNationality(), request.getBiography(),books);
+        return  new AuthorResponse(request.getId(), request.getName(), request.getNationality(), request.getBiography());
     }
 
 }

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Positive;
 
 import java.util.List;
 
-public class AuthorResponse {
+public class  AuthorResponse {
 
     @Positive(message = "id not valid")
     private Long id;
@@ -20,14 +20,11 @@ public class AuthorResponse {
     @NotBlank(message = "biography not valid")
     private String biography;
 
-    private List<@Valid BookSummary> books;
 
-    public AuthorResponse(Long id, String name, String nationality, String biography, List<@Valid BookSummary> books) {
-        this.id = id;
+    public AuthorResponse(Long id, String name, String nationality, String biography) {
         this.name = name;
         this.nationality = nationality;
         this.biography = biography;
-        this.books = books;
     }
 
     private Long getId() {
@@ -60,13 +57,5 @@ public class AuthorResponse {
 
     public void setBiography(String biography) {
         this.biography = biography;
-    }
-
-    public List<BookSummary> getBooks() {
-        return books;
-    }
-
-    public void setBooks(List<BookSummary> books) {
-        this.books = books;
     }
 }
