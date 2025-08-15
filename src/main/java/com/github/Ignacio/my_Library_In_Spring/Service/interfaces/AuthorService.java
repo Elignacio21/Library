@@ -89,7 +89,7 @@ public class AuthorService implements AuthorServiceInterface{
         return mapper.toAuthorResponse(target);
     }
 
-    public void applyPatch(Author author,String key,Object value){
+    private void applyPatch(Author author,String key,Object value){
         switch (key){
             case "name" : if(value instanceof String){
                 author.setName((String) value);

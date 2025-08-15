@@ -1,10 +1,8 @@
 package com.github.Ignacio.my_Library_In_Spring.DTOs;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
-import java.util.List;
 
 public class  AuthorResponse {
 
@@ -22,6 +20,7 @@ public class  AuthorResponse {
 
 
     public AuthorResponse(Long id, String name, String nationality, String biography) {
+        this.id = id;
         this.name = name;
         this.nationality = nationality;
         this.biography = biography;
