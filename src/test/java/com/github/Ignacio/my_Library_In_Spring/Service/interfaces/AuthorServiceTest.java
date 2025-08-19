@@ -4,12 +4,10 @@ import com.github.Ignacio.my_Library_In_Spring.DTOs.AuthorRequest;
 import com.github.Ignacio.my_Library_In_Spring.DTOs.AuthorResponse;
 import com.github.Ignacio.my_Library_In_Spring.DTOs.Mapper;
 import com.github.Ignacio.my_Library_In_Spring.Entity.Author;
-import com.github.Ignacio.my_Library_In_Spring.Entity.Book;
 import com.github.Ignacio.my_Library_In_Spring.HandingError.NotAuthorAvailableException;
-import com.github.Ignacio.my_Library_In_Spring.HandingError.NotBooksAvailableException;
 import com.github.Ignacio.my_Library_In_Spring.HandingError.NotFoundException;
 import com.github.Ignacio.my_Library_In_Spring.Repository.RepositoryAuthor;
-import com.github.Ignacio.my_Library_In_Spring.Service.BookService;
+import com.github.Ignacio.my_Library_In_Spring.Service.AuthorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -77,7 +75,7 @@ class AuthorServiceTest {
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals(expectedOutput, result.get(0));
+        assertEquals(expectedOutput, result.getFirst());
     }
 
     @Test
