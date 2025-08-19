@@ -4,6 +4,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +20,8 @@ import java.io.IOException;
 @Component
 public class AuthTokenFilter extends OncePerRequestFilter {
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
+
     @Autowired
     private JwtUtils utils;
 
@@ -30,11 +34,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
         try{
-            String token = utils.getJwtFromHeader(request);
+            String token = parseJwt(request);
+            logger.debug("Token extraído del header: {}", token);
             if(token != null && utils.isValid(token)){
                 String username = utils.getUsernameFromToken(token);
+                logger.debug("Token válido. Username extraído: {}", username);
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                logger.debug("UserDetails cargado: {}", userDetails.getUsername());
 
                 UsernamePasswordAuthenticationToken auth = new
                         UsernamePasswordAuthenticationToken(userDetails
@@ -44,11 +51,20 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
+                logger.info("Autenticación establecida para usuario: {}", username);
+
+            }else {
+                logger.warn("Token nulo o inválido");
 
             }
         }catch (Exception e ){
-
+            logger.error("Error en JwtFilter: {}", e.getMessage(), e);
         }
         filterChain.doFilter(request,response);
+    }
+    private String parseJwt(HttpServletRequest request){
+        String token = utils.getJwtFromHeader(request);
+        logger.debug("-2AuthTokenFilter.java; {}",token);
+        return token;
     }
 }

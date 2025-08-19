@@ -11,11 +11,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
@@ -39,14 +39,16 @@ public class JwtUtils {
         return null;
     }
 
-    public String generateTokenByName(UserDetails userDetailsr){
+    public String generateTokenByName(UserDetails userDetails){
         Date now = new Date();
-        return Jwts.builder()
-                .subject(userDetailsr.getUsername())
+        String token = Jwts.builder()
+                .subject(userDetails.getUsername())
                 .expiration(new Date(now.getTime() + timeDuring))
                 .signWith(key())
                 .issuedAt(now)
                 .compact();
+        logger.info("TOKEN GENERADO: {}", token);
+        return token;
     }
 
     public String getUsernameFromToken(String token){
@@ -64,7 +66,6 @@ public class JwtUtils {
                     .verifyWith((SecretKey) key())
                     .build()
                     .parseSignedClaims(token);
-
             return true;
         } catch (MalformedJwtException e) {
             logger.error("Invalid JWT token: {}", e.getMessage());
@@ -79,7 +80,8 @@ public class JwtUtils {
     }
 
     public Key key(){
-        byte[] bytes = Decoders.BASE64URL.decode(password);
-        return Keys.hmacShaKeyFor(bytes);
+        logger.debug("Generando clave secreta con longitud [{}] caracteres", password.length());
+        return Keys.hmacShaKeyFor(password.getBytes(StandardCharsets.UTF_8));
+
     }
 }
