@@ -32,6 +32,14 @@ public class ApiError {
         this.details = details;
     }
 
+    public ApiError(int code, String type, String message, String path, LocalDateTime time) {
+        this.code = code;
+        this.type = type;
+        this.message = message;
+        this.path = path;
+        this.time = time;
+    }
+
     public int getCode() {
         return code;
     }
