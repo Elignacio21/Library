@@ -7,6 +7,7 @@ import com.github.Ignacio.my_Library_In_Spring.Entity.Author;
 import com.github.Ignacio.my_Library_In_Spring.Entity.Book;
 import com.github.Ignacio.my_Library_In_Spring.HandingError.NotBooksAvailableException;
 import com.github.Ignacio.my_Library_In_Spring.HandingError.NotFoundException;
+import com.github.Ignacio.my_Library_In_Spring.Repository.RepositoryAuthor;
 import com.github.Ignacio.my_Library_In_Spring.Repository.RepositoryBook;
 import com.github.Ignacio.my_Library_In_Spring.Service.interfaces.BookServiceInterface;
 import jakarta.validation.Valid;
@@ -26,6 +27,8 @@ public class BookService implements BookServiceInterface {
     @Autowired
     private RepositoryBook repoBook;
 
+    @Autowired
+    private RepositoryAuthor repoAuthor;
     @Autowired
     private Mapper mapper;
 
@@ -66,11 +69,25 @@ public class BookService implements BookServiceInterface {
 
     @Override
     public BookResponse postBook(BookRequest input) {
-        logger.info("adding new book with title: {}",input.getTitle());
-        Book addBook = mapper.toEntityBook(input);
+        logger.info("Adding new book with title: {}", input.getTitle());
 
-        logger.debug("save new book with id: {}",addBook.getId());
+        // 1. Buscar el Author por ID (CRÍTICO)
+        Author author = repoAuthor.findById(input.getAuthorId())
+                .orElseThrow(() -> new RuntimeException(
+                        "Author not found with id: " + input.getAuthorId()
+                ));
+
+        logger.debug("Author found: {} - {}", author.getId(), author.getName());
+
+        // 2. Convertir BookRequest a Entity usando el Author encontrado
+        Book addBook = mapper.toEntityBook(input,author); // ← Pasar el author
+
+        // 3. Guardar el libro
+        logger.debug("Saving new book: {}", addBook.getTitle());
         repoBook.save(addBook);
+
+        // 4. Devolver respuesta
+        logger.info("Book saved successfully with ID: {}", addBook.getId());
         return mapper.toBookResponse(addBook);
     }
 
@@ -101,7 +118,6 @@ public class BookService implements BookServiceInterface {
                 });
 
         bookUpdate.setTitle(update.getTitle());
-        bookUpdate.setAuthor(update.getAuthor());
         bookUpdate.setGender(update.getGender());
         bookUpdate.setYearOfPublication(update.getYearOfPublication());
         bookUpdate.setEditorial(update.getEditorial());
@@ -120,9 +136,7 @@ public class BookService implements BookServiceInterface {
                     logger.error("Book with name {} not found for update",title);
                     return new NotFoundException("Book with name: "+title+" not found");
                 });
-
         bookUpdate.setTitle(update.getTitle());
-        bookUpdate.setAuthor(update.getAuthor());
         bookUpdate.setGender(update.getGender());
         bookUpdate.setYearOfPublication(update.getYearOfPublication());
         bookUpdate.setEditorial(update.getEditorial());
