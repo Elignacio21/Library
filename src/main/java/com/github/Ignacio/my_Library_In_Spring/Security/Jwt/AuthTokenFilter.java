@@ -35,13 +35,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         try{
             String token = parseJwt(request);
-            logger.debug("Token extraído del header: {}", token);
+            logger.debug("Token extracted from the header: {}", token);
             if(token != null && utils.isValid(token)){
                 String username = utils.getUsernameFromToken(token);
-                logger.debug("Token válido. Username extraído: {}", username);
+                logger.debug("Token valid. Username extracted: {}", username);
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                logger.debug("UserDetails cargado: {}", userDetails.getUsername());
+                logger.debug("UserDetails loaded: {}", userDetails.getUsername());
 
                 UsernamePasswordAuthenticationToken auth = new
                         UsernamePasswordAuthenticationToken(userDetails
@@ -51,10 +51,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
-                logger.info("Autenticación establecida para usuario: {}", username);
+                logger.info("Authentication established for user: {}", username);
 
             }else {
-                logger.warn("Token nulo o inválido");
+                logger.warn("Token is null or invalid: {}",token);
 
             }
         }catch (Exception e ){

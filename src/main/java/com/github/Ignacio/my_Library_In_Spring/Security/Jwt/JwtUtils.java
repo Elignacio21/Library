@@ -80,8 +80,10 @@ public class JwtUtils {
     }
 
     public Key key(){
-        logger.debug("Generando clave secreta con longitud [{}] caracteres", password.length());
-        return Keys.hmacShaKeyFor(password.getBytes(StandardCharsets.UTF_8));
+        logger.debug("Key Base64: {}", password);
+        logger.debug("Longitud Base64: {}", password.length());
+        byte[] keyBytes = Decoders.BASE64.decode(password);
+        return Keys.hmacShaKeyFor(keyBytes);
 
     }
 }
