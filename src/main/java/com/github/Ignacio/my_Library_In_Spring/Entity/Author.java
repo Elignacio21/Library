@@ -1,5 +1,6 @@
 package com.github.Ignacio.my_Library_In_Spring.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
@@ -22,6 +23,7 @@ public class Author {
     private String biography;
 
     @OneToMany(mappedBy = "author")
+    @JsonManagedReference
     private List<Book> books;
 
     public Author(){};

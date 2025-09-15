@@ -1,10 +1,13 @@
 package com.github.Ignacio.my_Library_In_Spring.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,9 +17,9 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Valid
     @ManyToOne
     @JoinColumn(name = "author_id")
+    @JsonBackReference
     private Author author;
 
     @NotBlank(message = "editorial not valid")
@@ -35,7 +38,9 @@ public class Book {
     @Positive
     private int yearOfPublication;
 
-    public Book(){}
+    public Book(){};
+
+    public Book(String title, Long authorId, String editorial, String gender, boolean available, Integer yearOfPublication){}
 
     //for testing
     public Book(Long id,String title, Author author, String editorial, String gender, boolean available, int yearOfPublication) {
