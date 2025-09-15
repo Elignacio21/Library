@@ -1,6 +1,5 @@
 package com.github.Ignacio.my_Library_In_Spring.DTOs;
 
-import com.github.Ignacio.my_Library_In_Spring.Entity.Author;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -11,7 +10,7 @@ public class BookRequest {
     private String title;
 
     @Valid
-    private Author author;
+    private Long authorId;
 
     @NotBlank
     private String gender;
@@ -24,9 +23,9 @@ public class BookRequest {
 
     public BookRequest(){};
 
-    public BookRequest(String title, Author author, String gender, Integer yearOfPublication, String editorial) {
+    public BookRequest(String title,Long authorId, String gender, Integer yearOfPublication, String editorial) {
         this.title = title;
-        this.author = author;
+        this.authorId = authorId;
         this.gender = gender;
         this.yearOfPublication = yearOfPublication;
         this.editorial = editorial;
@@ -40,12 +39,12 @@ public class BookRequest {
         this.title = title;
     }
 
-    public Author getAuthor() {
-        return author;
+    public Long getAuthorId() {
+        return authorId;
     }
 
-    public void setAuthor(Author author) {
-        this.author = author;
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
     }
 
     public String getGender() {

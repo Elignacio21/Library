@@ -1,11 +1,12 @@
 package com.github.Ignacio.my_Library_In_Spring.DTOs;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 
 
 public class AuthorRequest {
 
-    @NotBlank(message = "id not valid")
+    @Positive(message = "id not valid")
     private Long id;
 
     @NotBlank(message = "name not valid")

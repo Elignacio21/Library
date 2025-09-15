@@ -11,9 +11,9 @@ import java.util.List;
 @Component
 public class Mapper {
 
-    public Book toEntityBook(BookRequest request){
+    public Book toEntityBook(BookRequest request,Author author){
         return new Book(request.getTitle()
-                ,request.getAuthor()
+                ,author
                 ,request.getEditorial()
                 ,request.getGender()
                 ,true
