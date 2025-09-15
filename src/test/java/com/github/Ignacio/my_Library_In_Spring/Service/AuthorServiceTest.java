@@ -1,4 +1,4 @@
-package com.github.Ignacio.my_Library_In_Spring.Service.interfaces;
+package com.github.Ignacio.my_Library_In_Spring.Service;
 
 import com.github.Ignacio.my_Library_In_Spring.DTOs.AuthorRequest;
 import com.github.Ignacio.my_Library_In_Spring.DTOs.AuthorResponse;
@@ -7,7 +7,6 @@ import com.github.Ignacio.my_Library_In_Spring.Entity.Author;
 import com.github.Ignacio.my_Library_In_Spring.HandingError.NotAuthorAvailableException;
 import com.github.Ignacio.my_Library_In_Spring.HandingError.NotFoundException;
 import com.github.Ignacio.my_Library_In_Spring.Repository.RepositoryAuthor;
-import com.github.Ignacio.my_Library_In_Spring.Service.AuthorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
