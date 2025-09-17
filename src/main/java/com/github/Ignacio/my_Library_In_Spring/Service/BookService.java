@@ -71,7 +71,6 @@ public class BookService implements BookServiceInterface {
     public BookResponse postBook(BookRequest input) {
         logger.info("Adding new book with title: {}", input.getTitle());
 
-        // 1. Buscar el Author por ID (CRÍTICO)
         Author author = repoAuthor.findById(input.getAuthorId())
                 .orElseThrow(() -> new RuntimeException(
                         "Author not found with id: " + input.getAuthorId()
@@ -79,14 +78,11 @@ public class BookService implements BookServiceInterface {
 
         logger.debug("Author found: {} - {}", author.getId(), author.getName());
 
-        // 2. Convertir BookRequest a Entity usando el Author encontrado
         Book addBook = mapper.toEntityBook(input,author); // ← Pasar el author
 
-        // 3. Guardar el libro
         logger.debug("Saving new book: {}", addBook.getTitle());
         repoBook.save(addBook);
 
-        // 4. Devolver respuesta
         logger.info("Book saved successfully with ID: {}", addBook.getId());
         return mapper.toBookResponse(addBook);
     }
@@ -117,32 +113,65 @@ public class BookService implements BookServiceInterface {
                     return new NotFoundException("Book with id: "+id+" not found");
                 });
 
+        Author newAuthor = null;
+        if (update.getAuthorId() != null &&
+                !update.getAuthorId().equals(bookUpdate.getAuthor().getId())) {
+
+            newAuthor = repoAuthor.findById(update.getAuthorId())
+                    .orElseThrow(() -> {
+                        logger.error("Author with id {} not found for update", update.getAuthorId());
+                        return new NotFoundException("Author with id: " + update.getAuthorId() + " not found");
+                    });
+        }
+
         bookUpdate.setTitle(update.getTitle());
         bookUpdate.setGender(update.getGender());
         bookUpdate.setYearOfPublication(update.getYearOfPublication());
         bookUpdate.setEditorial(update.getEditorial());
 
+        if (newAuthor != null) {
+            bookUpdate.setAuthor(newAuthor); // ← Aquí actualizas la relación DESDE EL LIBRO
+            logger.debug("Author updated to: {} - {}", newAuthor.getId(), newAuthor.getName());
+        }
+
         repoBook.save(bookUpdate);
-        logger.info("book with id {} update successfully",id);
+        logger.info("Book with id {} updated successfully", id);
         return mapper.toBookResponse(bookUpdate);
 
     }
 
     @Override
     public BookResponse putBookByName(String title,BookRequest update) {
-        logger.info("Updating book with name: {}", title);
+        logger.info("Updating book with title: {}", title);
         Book bookUpdate = repoBook.findByTitle(title)
                 .orElseThrow(() -> {
-                    logger.error("Book with name {} not found for update",title);
+                    logger.error("Book with title {} not found for update",title);
                     return new NotFoundException("Book with name: "+title+" not found");
                 });
+
+        Author newAuthor = null;
+        if (update.getAuthorId() != null &&
+                !update.getAuthorId().equals(bookUpdate.getAuthor().getId())) {
+
+            newAuthor = repoAuthor.findById(update.getAuthorId())
+                    .orElseThrow(() -> {
+                        logger.error("Author with id {} not found for update by name", update.getAuthorId());
+                        return new NotFoundException("Author with id: " + update.getAuthorId() + " not found");
+                    });
+        }
+
         bookUpdate.setTitle(update.getTitle());
         bookUpdate.setGender(update.getGender());
         bookUpdate.setYearOfPublication(update.getYearOfPublication());
         bookUpdate.setEditorial(update.getEditorial());
 
+        if (newAuthor != null) {
+            bookUpdate.setAuthor(newAuthor); // ← Aquí actualizas la relación DESDE EL LIBRO
+            logger.debug("Author updated to: {} - {}", newAuthor.getId(), newAuthor.getName());
+        }
+
         repoBook.save(bookUpdate);
-        logger.info("book with name {} update successfully",title);
+        logger.info("Book with id {} updated successfully",title);
         return mapper.toBookResponse(bookUpdate);
     }
 
